@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Delete, Body, Param, HttpCode, Header } from '@nestjs/common';
-import { create } from 'domain';
+import { HeroesService } from './heroes.service';
+import { CreateHeroDTO, Hero, HeroDTO } from './heroes.model';
 
 /**
  * Rest APi related to super-heroes
@@ -7,31 +8,32 @@ import { create } from 'domain';
 @Controller('heroes')
 export class HeroesController {
 
+    constructor(private readonly service: HeroesService) {}
+
     @Post()
-    @Header('Cache-Control', 'none')
-    @HttpCode(200)
-    create(): string {
-        return 'New Hero';
+    create(@Body() hero: CreateHeroDTO): Hero {
+        return this.service.create(hero);
     }
     
     @Get(':id')
-    read(@Param('id') id: string): string {
-        return 'Batman';
+    read(@Param('id') id: string): Hero {
+        return this.service.read(id);
     }
 
     @Post()
-    update(@Body() hero: string): string {
-        return "Updated Batman"
+    update(@Body() hero: HeroDTO): Hero {
+        return this.service.update(hero);
     }
 
     @Delete(':id')
-    delete() {
-        return "Deleted hero"
+    delete(@Param('id') id: string) {
+        return this.service.delete(id);
     }
 
     @Get()
-    findAll(): string[] {
-        return [ 'Batman' , 'Superman' ];
+    findAll(): Hero[] {
+        console.log( 'rere')
+        return this.service.findAll();
     }
 
     
