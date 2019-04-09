@@ -32,7 +32,6 @@ export class HeroesController {
 
     @Get()
     findAll(): Hero[] {
-        console.log( 'rere')
         return this.service.findAll();
     }
 
