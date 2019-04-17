@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Body, Param, HttpCode, Header, SetMetadata } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, HttpCode, Header, SetMetadata, HttpException, HttpStatus, UseFilters } from '@nestjs/common';
 import { HeroesService } from './heroes.service';
 import { CreateHeroDTO, Hero, HeroDTO } from './heroes.model';
 import { Roles } from 'src/shared/decorator/roles.decorator';
+import { HttpExceptionFilter } from 'src/shared/filter/http-exception.filter';
 
 /**
  * Rest APi related to super-heroes
@@ -20,8 +21,10 @@ export class HeroesController {
     
     @Get(':id')
     @Roles('Wizard', 'Muggle')
+    //@UseFilters(new HttpExceptionFilter())
     read(@Param('id') id: string): Hero {
-        return this.service.read(id);
+        throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        //return this.service.read(id);
     }
 
     @Post()
