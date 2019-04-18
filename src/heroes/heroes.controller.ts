@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, HttpCode, Header, SetMetadata, HttpException, HttpStatus, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, HttpCode, Header, SetMetadata, HttpException, HttpStatus, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { HeroesService } from './heroes.service';
 import { CreateHeroDTO, Hero, HeroDTO } from './heroes.model';
 import { Roles } from 'src/shared/decorator/roles.decorator';
@@ -14,6 +14,7 @@ export class HeroesController {
 
     @Post()
     @SetMetadata('roles', ['admin'])
+    @UsePipes(ValidationPipe)
     create(@Body() hero: CreateHeroDTO): Hero {
         return this.service.create(hero);
     }
