@@ -1,6 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Hero } from './heroes.model';
 
+
+
+function readonly(target, name, descriptor) {
+    descriptor.writable = false;
+    return descriptor;
+}
+
+
+
 /**
  * Business service related to heroes
  */

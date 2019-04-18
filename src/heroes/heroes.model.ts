@@ -1,4 +1,5 @@
 
+import { IsString, IsArray, IsIn, IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 
 /**  
  * Types related to heroes
@@ -14,10 +15,50 @@ export interface Hero {
 }
 
 /** Base type for Hero DTO */
-export type HeroDTO = Hero | null;
+export class HeroDTO {
+
+    @IsString()
+    readonly id: string;
+
+    @IsString()
+    readonly name: string;
+
+    @IsArray()
+    readonly superpowers: string[];
+
+    @IsString()
+    @IsIn(['M', 'F'])
+    readonly gender: 'M' | 'F';
+
+    @IsString()
+    readonly placeBirth: string;
+}
 
 /** Hero to create DTO type */
-export type CreateHeroDTO = Pick<HeroDTO, Exclude<keyof HeroDTO, "id">>;
+export class CreateHeroDTO extends HeroDTO {
+
+    @IsEmpty()
+    @IsOptional()
+    readonly id: string;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly name: string;
+
+    @IsArray()
+    @IsOptional()
+    readonly superpowers: string[];
+
+    @IsString()
+    @IsIn(['M', 'F'])
+    @IsOptional()
+    readonly gender: 'M' | 'F';
+
+    @IsString()
+    @IsOptional()
+    readonly placeBirth: string;
+}
+
 
 
 
