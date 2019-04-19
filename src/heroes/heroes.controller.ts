@@ -1,15 +1,16 @@
-import { Controller, Get, Post, Delete, Body, Param, HttpCode, Header, SetMetadata, HttpException, HttpStatus, UseFilters, UsePipes, ValidationPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, UsePipes, ValidationPipe, Put, UseInterceptors, CacheInterceptor } from '@nestjs/common';
 import { HeroesService } from './heroes.service';
 import { CreateHeroDTO, HeroDTO, UpdateHeroDTO } from './heroes.dto';
-import { Roles } from 'src/shared/decorator/roles.decorator';
 
 /**
  * Rest APi related to super-heroes
  */
 @Controller('heroes')
+@UseInterceptors(CacheInterceptor)
 export class HeroesController {
 
-    constructor(private readonly service: HeroesService) {}
+    constructor( 
+        private readonly service: HeroesService) {}
 
     @Post()
     @UsePipes(ValidationPipe)
@@ -35,6 +36,7 @@ export class HeroesController {
 
     @Get()
     async findAll(): Promise<HeroDTO[]>  {
+        console.log('SNIFF, NOT CACHED')
         return this.service.findAll();
     }
 

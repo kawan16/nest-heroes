@@ -16,8 +16,8 @@ import { DatabaseModule } from './database.module';
     {
         provide: APP_GUARD,
         useClass: RoleGuard,
-    }
-  ],
+    },
+  ]
 })
 export class AppModule {
 
