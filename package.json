@@ -26,6 +26,7 @@
     "@nestjs/typeorm": "^6.0.0",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
+    "dotenv": "^7.0.0",
     "mongodb": "^3.2.3",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
