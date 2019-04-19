@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Hero } from './heroes.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Hero } from './heroes.entity';
+import { CreateHeroDTO, HeroDTO, UpdateHeroDTO } from './heroes.dto';
+import { Repository } from 'typeorm';
 
 /**
  * Business service related to heroes
@@ -7,49 +10,33 @@ import { Hero } from './heroes.model';
 @Injectable()
 export class HeroesService {
 
-    /** The list of heroes (Mock) */
-    private readonly heroes: Hero[] = [
-        {
-            name: 'Batman',
-            superpowers: ['Gliding', 'Weapon-based Powers'],
-            gender: 'M',
-            placeBirth: 'Crest Hill (Bristol Township, Gotham City)'
-        },
-        {
-            name: 'superman',
-            superpowers: ['Cryokinesis', 'Vision - Heat'],
-            gender: 'M',
-            placeBirth: 'Krypton'
-        }
-        
-    ];
+    constructor(
+        @InjectRepository(Hero) 
+        private readonly repository: Repository<Hero> ) {}
 
 
     /** Create a hero */
-    create(hero: Hero): Hero {
-        const newHero = { id: 'some id' , ...hero };
-        this.heroes.push(newHero);
-        return newHero;
+    create(hero: CreateHeroDTO): Promise<HeroDTO> {
+        return this.repository.save(hero);
     }
 
     /** Returns the hero with the given identifier */
-    read(id: string): Hero {
-        return this.heroes[0];
+    read(id: string): Promise<HeroDTO> {
+        return this.repository.findOne(id);
     }
 
     /** Update the given hero */
-    update(hero: Hero): Hero {
-        /** Do some update */
-        return hero;
+    update(hero: UpdateHeroDTO): Promise<HeroDTO>  {
+        return this.repository.save(hero);
     }
   
     /** Delete the hero with given identifier */
-    delete(id:string) {
-        /** Do some deletion */
+    delete(id:string): Promise<any> {
+       return this.repository.delete(id);
     }
 
     /** Retrieve the list of heroes */
-    findAll(): Hero[] {
-      return this.heroes;
+    findAll(): Promise<HeroDTO[]>{
+      return this.repository.find();
     }
 }
