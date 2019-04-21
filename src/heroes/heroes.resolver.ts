@@ -1,39 +1,42 @@
 import { Resolver, Args, Mutation, Query } from '@nestjs/graphql';
-import { HeroesService } from './heroes.service';
-import { Body, ValidationPipe, UsePipes } from '@nestjs/common';
 import { HeroDTO, CreateHeroDTO, UpdateHeroDTO } from './heroes.dto';
+import { Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Resolver('Heroes')
 export class HeroesResolver {
 
-    constructor(private readonly service: HeroesService) {}
+    constructor(@Inject('HEROES_SERVICE') private readonly client: ClientProxy) {}
 
     
-    @Mutation('create')
-    async create(@Args('hero') hero: CreateHeroDTO): Promise<HeroDTO> {
-        return this.service.create(hero);
+    @Mutation(returns => HeroDTO)
+    create(@Args('hero') hero: CreateHeroDTO): Promise<HeroDTO> {
+        const pattern = {cmd: 'create'};
+        return this.client.send<HeroDTO>(pattern, hero).toPromise();
     }
 
-    @Query('hero')
+    @Query(returns => [HeroDTO], { name: 'hero' })
     async read( @Args('id') id: string): Promise<HeroDTO> {
-        return this.service.read(id);
+        const pattern = {cmd: 'read'};
+        return this.client.send<HeroDTO>(pattern, id).toPromise();
     }
     
-    @Mutation('update')
+    @Mutation(returns => HeroDTO)
     async update(@Args('hero') hero: UpdateHeroDTO): Promise<HeroDTO>  {
-        return this.service.update(hero);
+        const pattern = {cmd: 'update'};
+        return this.client.send<HeroDTO>(pattern, hero).toPromise();
     }
 
-    @Mutation('delete')
+    @Mutation(returns => String)
     async delete(@Args('id') id: string) {
-        console.log( ' DELETE')
-        return this.service.delete(id).then( () => id );
+        const pattern = {cmd: 'delete'};
+        return this.client.send<String>(pattern, id).toPromise();
     }
 
-    @Query('heroes')
+    @Query(returns => [HeroDTO], { name: 'heroes' })
     async findAll(): Promise<HeroDTO[]>  {
-        console.log( ' find all ');
-        return this.service.findAll();
+        const pattern = {cmd: 'findall'};
+        return this.client.send<HeroDTO[]>(pattern, {}).toPromise();
     }
 
     
