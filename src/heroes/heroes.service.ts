@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hero } from './heroes.entity';
 import { CreateHeroDTO, HeroDTO, UpdateHeroDTO } from './heroes.dto';
