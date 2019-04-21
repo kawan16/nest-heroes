@@ -8,14 +8,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(compression());
-
-  const options = new DocumentBuilder()
-    .setTitle('Heroes')
-    .setDescription('The Heroes API description')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
   await app.listen(3000);
 }
 bootstrap();

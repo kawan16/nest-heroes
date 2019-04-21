@@ -1,0 +1,23 @@
+{
+  hero(id: "5cb8ed1ef6705435f0204be7") {
+    name
+  }
+}
+
+{
+  heroes {
+    name
+    gender
+  }
+}
+
+mutation NewHero($hero: CreateHeroDTO!) {
+  create(hero: $hero) {
+    id
+    name
+  }
+}
+
+mutation DeleteHero($id: ID!) {
+  delete(id: $id) 
+}
