@@ -1,84 +1,60 @@
-
-import { IsString, IsInt, ValidateIf, IsArray, IsIn, IsEmpty, IsNotEmpty, IsOptional, IsDefined } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { Field, ObjectType, InputType } from 'type-graphql';
 
 
 /** Base type for Hero DTO */
+@ObjectType()
 export class HeroDTO {
 
-    @IsString()
-    readonly id?: string;
+    @Field()
+    readonly id: string;
 
-    @IsString()
-    readonly name?: string;
+    @Field()
+    readonly name: string;
 
-    @IsArray()
-    readonly superpowers?: string[];
+    @Field(type => [String], { nullable: true })
+    readonly superpowers: string[];
 
-    @IsString()
-    @IsIn(['M', 'F'])
-    readonly gender?: 'M' | 'F';
+    @Field({ nullable: true })
+    readonly gender: 'M' | 'F';
 
-    @IsString()
-    readonly placeBirth?: string;
+    @Field({ nullable: true })
+    readonly placeBirth: string;
 }
 
 /** Hero to create DTO type */
-export class CreateHeroDTO extends HeroDTO {
+@InputType()
+export class CreateHeroDTO {
 
-    @IsEmpty()
-    @IsOptional()
-    readonly id: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @ApiModelProperty()
+    @Field()
     readonly name: string;
 
-    @IsArray()
-    @IsOptional()
-    @ApiModelProperty({required: false})
+    @Field(type => [String], { nullable: true })
     readonly superpowers: string[];
 
-    @IsString()
-    @IsIn(['M', 'F'])
-    @IsOptional()
-    @ApiModelProperty({required: false, enum: ['M', 'F']})
+    @Field({ nullable: true })
     readonly gender: 'M' | 'F';
 
-    @IsString()
-    @IsOptional()
-    @ApiModelProperty({required: false})
+    @Field({ nullable: true })
     readonly placeBirth: string;
 }
 
 
 /** Hero to update DTO type */
-export class UpdateHeroDTO extends HeroDTO {
-
-    @IsNotEmpty()
-    @ApiModelProperty()
+@InputType()
+export class UpdateHeroDTO {
+    @Field()
     readonly id: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiModelProperty()
+    @Field()
     readonly name: string;
 
-    @IsArray()
-    @IsOptional()
-    @ApiModelProperty()
+    @Field(type => [String], { nullable: true })
     readonly superpowers: string[];
 
-    @IsString()
-    @IsIn(['M', 'F'])
-    @IsOptional()
-    @ApiModelProperty()
+    @Field({ nullable: true })
     readonly gender: 'M' | 'F';
 
-    @IsString()
-    @IsOptional()
-    @ApiModelProperty()
+    @Field({ nullable: true })
     readonly placeBirth: string;
 }
 
