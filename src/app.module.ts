@@ -5,6 +5,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { RoleGuard } from './shared/guard/role.guard';
 import { DatabaseModule } from './database.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { LoggerModule } from './logger/logger.module';
+import { ClientsModule } from '@nestjs/microservices';
+import { Transport } from '@nestjs/common/enums/transport.enum';
 
 
 
@@ -17,7 +20,14 @@ import { GraphQLModule } from '@nestjs/graphql';
       playground: true,
     }),
     HeroesModule,
-    DatabaseModule
+    DatabaseModule,
+    ClientsModule.register([{ 
+      name: 'LOGGER', 
+      transport: Transport.TCP ,
+      options: {
+        port: 3002
+      }
+    }]),
   ],
   providers: [
     {
